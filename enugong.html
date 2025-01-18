@@ -12,7 +12,6 @@
             background-color: #f0f0f0;
         }
 
-        /* 채팅창 화면 전체 설정 */
         .chat-container {
             height: 800px;
             background-color: #96bad0;
@@ -23,7 +22,6 @@
             flex-direction: column;
         }
 
-        /* 공지방 헤더 설정 */
         .chat-header {
             height: 50px;
             background-color: #f7f7f7;
@@ -42,7 +40,6 @@
             cursor: pointer;
         }
 
-        /* 메세지 박스 설정 */
         .chat-messages {
             flex: 1;
             padding: 10px;
@@ -50,24 +47,21 @@
             background-color: #96bad0;
         }
 
-        /* 메세지 전체적인 설정 */
         .chat-message {
             margin-bottom: 15px;
             display: flex;
             align-items: flex-start;
         }
 
-        /* 프사 동그랗게 만드는 설정 */
         .chat-message .profile-picture {
             flex-shrink: 0;
             width: 40px;
             height: 40px;
             border-radius: 50%;
-            background-color: #ddd;
+            background-color: #ad1515;
             margin-right: 10px;
         }
 
-        /* 채팅 내용 설정 */
         .chat-message .message-content {
             font-size: 13px;
             display: flex;
@@ -87,7 +81,6 @@
             border-radius: 3px;
         }
 
-        /* 사용자가 보내는 채팅 */
         .message-sent {
             flex-direction: row-reverse;
         }
@@ -102,12 +95,10 @@
             align-self: flex-end;
         }
 
-        /* 받는 채팅 설정 */
         .message-received span {
             background-color: white;
         }
 
-        /* 채팅 보내는 창 설정 */
         .chat-footer {
             height: 50px;
             background-color: #f7f7f7;
@@ -185,6 +176,17 @@
         const messageInput = document.getElementById('message-input');
         const sendButton = document.getElementById('send-button');
 
+        function getProfileColor(sender) {
+            switch (sender) {
+                case '김유현 대리님':
+                    return '#9dff87';
+                case '김보라 과장님':
+                    return 'pink';
+                default:
+                    return 'black';
+            }
+        }
+
         function displayMessages() {
             chatMessages.innerHTML = ''; // 기존 메시지 초기화
             messages.forEach(msg => {
@@ -212,6 +214,7 @@
 
                     const profilePicture = document.createElement('div');
                     profilePicture.classList.add('profile-picture');
+                    profilePicture.style.backgroundColor = getProfileColor(msg.sender);
 
                     const messageContent = document.createElement('div');
                     messageContent.classList.add('message-content');
