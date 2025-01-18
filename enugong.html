@@ -14,7 +14,7 @@
 
         /* 채팅창 화면 전체 설정 */
         .chat-container {
-            height: 1000px;
+            height: 800px;
             background-color: #96bad0;
             border: 1px solid #ddd;
             border-radius: 10px;
@@ -87,7 +87,7 @@
             border-radius: 3px;
         }
 
-        /* 사용자가 보내는 채팅인데 혹시 쓸 일 있으면 쓰삼 !! */
+        /* 사용자가 보내는 채팅 */
         .message-sent {
             flex-direction: row-reverse;
         }
@@ -142,7 +142,6 @@
             color: #6d6d6d;
         }
 
-        /* 메세지 css */
         .system-message {
             text-align: center;
             font-size: 14px;
@@ -169,13 +168,12 @@
         <div class="chat-messages" id="chat-messages">
         </div>
         <div class="chat-footer">
-            <input type="text" placeholder="메세지를 입력하세요." disabled>
-            <button disabled>전송</button>
+            <input type="text" id="message-input" placeholder="메세지를 입력하세요.">
+            <button id="send-button">전송</button>
         </div>
     </div>
 
     <script>
-        // 채팅 메세지 박스 
         const messages = [
             { type: 'received', text: '여러분 단체방에 죄송하지만 글 하나만 적겠습니다.', sender: '김유현 대리님' },
             { type: 'received', text: '안녕ㅇㅇ연아너를처음본순간부터좋아했어방학전에고백하고싶었는데바보같이그땐용기가없더라지금은이수많은사람들앞에서오로지너만사랑한다고말하고싶어서큰마음먹고용기내어봐매일매일버스에서너볼때마다두근댔고동아리랑과활동에서도너만보이고너생각만나고지난3월부터계속그랬어니가남자친구랑헤어지고니맘이아파울때내마음도너무아팠지만내심좋은맘두있었어이런내맘을어떻게말할지고민하다가정말인생에서제일크게용기내어세상에서제일멋지게많은사람들앞에서너한테고백해주고싶어사랑하는ㅇㅇ연님내여자가되줄래?아니나만의태양이되어줄래?난너의달임이될게내일3시반에너수업마치고학관앞에서기다리고있을게너를사랑하는ㅇㅇ윤이가', sender: '김유현 대리님' },
@@ -184,12 +182,13 @@
         ];
 
         const chatMessages = document.getElementById('chat-messages');
+        const messageInput = document.getElementById('message-input');
+        const sendButton = document.getElementById('send-button');
 
-        // Function to display messages in the chat UI
         function displayMessages() {
+            chatMessages.innerHTML = ''; // 기존 메시지 초기화
             messages.forEach(msg => {
                 if (msg.type === 'system') {
-                    // 시스템 메세지(퇴장) 설정
                     const systemMessage = document.createElement('div');
                     systemMessage.classList.add('system-message');
 
@@ -208,7 +207,6 @@
                     systemMessage.appendChild(line2);
                     chatMessages.appendChild(systemMessage);
                 } else {
-                    // 유저 메세지 설정 
                     const messageDiv = document.createElement('div');
                     messageDiv.classList.add('chat-message', msg.type === 'sent' ? 'message-sent' : 'message-received');
 
@@ -235,10 +233,26 @@
                 }
             });
 
-            // 스크롤 
             chatMessages.scrollTop = chatMessages.scrollHeight;
         }
 
+        function addMessage(text) {
+            if (text.trim() !== '') {
+                messages.push({ type: 'sent', text: text, sender: '썸냐' });
+                displayMessages();
+                messageInput.value = '';
+            }
+        }
+
+        sendButton.addEventListener('click', () => {
+            addMessage(messageInput.value);
+        });
+
+        messageInput.addEventListener('keypress', (event) => {
+            if (event.key === 'Enter') {
+                addMessage(messageInput.value);
+            }
+        });
 
         displayMessages();
     </script>
