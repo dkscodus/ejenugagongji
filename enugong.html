@@ -1,0 +1,190 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>KakaoTalk Chat UI</title>
+    <style>
+        body {
+            margin: 0;
+            font-family: Arial, sans-serif;
+            background-color: #f0f0f0;
+        }
+
+        .chat-container {
+            width: 360px;
+            height: 640px;
+            margin: 20px auto;
+            background-color: #96bad0;
+            border: 1px solid #ddd;
+            border-radius: 10px;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+            display: flex;
+            flex-direction: column;
+        }
+
+        .chat-header {
+            height: 50px;
+            background-color: #f7f7f7;
+            border-bottom: 1px solid #ddd;
+            display: flex;
+            align-items: center;
+            padding: 0 10px;
+            font-weight: bold;
+            color: #333;
+            font-size: 16px;
+        }
+
+        .chat-header i {
+            margin-right: 10px;
+            font-size: 20px;
+            cursor: pointer;
+        }
+
+        .chat-messages {
+            flex: 1;
+            padding: 10px;
+            overflow-y: auto;
+            background-color: #ffffff;
+        }
+
+        .chat-message {
+            margin-bottom: 15px;
+            display: flex;
+            flex-direction: column;
+        }
+
+        .chat-message span {
+            max-width: 70%;
+            word-wrap: break-word;
+            padding: 8px 12px;
+            border-radius: 3px;
+        }
+
+        .message-sent span {
+            background-color: #e1ffc7;
+            align-self: flex-end;
+        }
+
+        .message-received {
+            align-self: flex-start;
+        }
+
+        .message-received span {
+            background-color: white;
+        }
+
+        .chat-footer {
+            height: 50px;
+            background-color: #f7f7f7;
+            border-top: 1px solid #ddd;
+            display: flex;
+            align-items: center;
+            padding: 0 10px;
+        }
+
+        .chat-footer input {
+            flex: 1;
+            border: 1px solid #ddd;
+            border-radius: 20px;
+            padding: 5px 15px;
+            font-size: 14px;
+            outline: none;
+        }
+
+        .chat-footer button {
+            margin-left: 10px;
+            background-color: #5cb85c;
+            color: white;
+            border: none;
+            border-radius: 20px;
+            padding: 5px 15px;
+            font-size: 14px;
+            cursor: pointer;
+        }
+
+        .chat-footer button:hover {
+            background-color: #4cae4c;
+        }
+
+        .system-message {
+            text-align: center;
+            font-size: 14px;
+            color: #666;
+            background-color: #f1f1f1;
+            padding: 5px 10px;
+            border-radius: 5px;
+            margin: 10px 0;
+        }
+
+        .system-message .invite-link {
+            text-decoration: underline;
+            cursor: pointer;
+        }
+    </style>
+</head>
+<body>
+    <div class="chat-container">
+        <div class="chat-header">
+            <i>&#8592;</i>
+            공지방 68
+        </div>
+        <div class="chat-messages" id="chat-messages">
+            <!-- Messages will appear here -->
+        </div>
+        <div class="chat-footer">
+            <input type="text" placeholder="메세지를 입력하세요." disabled>
+            <button disabled>보내기</button>
+        </div>
+    </div>
+
+    <script>
+        const messages = [
+            { type: 'received', text: '여러분 단체방에 죄송하지만 글 하나만 적겠습니다.' },
+            { type: 'received', text: '안녕ㅇㅇ연아너를처음본순간부터좋아했어방학전에고백하고싶었는데바보같이그땐용기가없더라지금은이수많은사람들앞에서오로지너만사랑한다고말하고싶어서큰마음먹고용기내어봐매일매일버스에서너볼때마다두근댔고동아리랑과활동에서도너만보이고너생각만나고지난3월부터계속그랬어니가남자친구랑헤어지고니맘이아파울때내마음도너무아팠지만내심좋은맘두있었어이런내맘을어떻게말할지고민하다가정말인생에서제일크게용기내어세상에서제일멋지게많은사람들앞에서너한테고백해주고싶어사랑하는ㅇㅇ연님내여자가되줄래?아니나만의태양이되어줄래?난너의달임이될게내일3시반에너수업마치고학관앞에서기다리고있을게너를사랑하는ㅇㅇ윤이가' },
+            { type: 'system', text: '과대녀 김ㅇ연 님이 퇴장했습니다.\n채팅방으로 초대하기' },
+            { type: 'received', text: '이제 누가 공지해주냐' }
+        ];
+
+        const chatMessages = document.getElementById('chat-messages');
+
+        function displayMessages() {
+            messages.forEach(msg => {
+                if (msg.type === 'system') {
+                    const systemMessage = document.createElement('div');
+                    systemMessage.classList.add('system-message');
+
+                    const [firstLine, secondLine] = msg.text.split('\n');
+                    const line1 = document.createElement('div');
+                    line1.textContent = firstLine;
+
+                    const line2 = document.createElement('div');
+                    const inviteLink = document.createElement('span');
+                    inviteLink.textContent = secondLine;
+                    inviteLink.classList.add('invite-link');
+
+                    line2.appendChild(inviteLink);
+
+                    systemMessage.appendChild(line1);
+                    systemMessage.appendChild(line2);
+                    chatMessages.appendChild(systemMessage);
+                } else {
+                    const messageDiv = document.createElement('div');
+                    messageDiv.classList.add('chat-message', msg.type === 'sent' ? 'message-sent' : 'message-received');
+
+                    const messageText = document.createElement('span');
+                    messageText.textContent = msg.text;
+                    messageDiv.appendChild(messageText);
+
+                    chatMessages.appendChild(messageDiv);
+                }
+            });
+
+            // Scroll to the bottom of the chat
+            chatMessages.scrollTop = chatMessages.scrollHeight;
+        }
+
+        displayMessages();
+    </script>
+</body>
+</html>
